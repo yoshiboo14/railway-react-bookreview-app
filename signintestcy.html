@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>サンプル</title>
+  </head>
+
+  <body>
+    <h1>ログインフォーム　</h1>
+    ユーザー
+    <input type="text" id="input-name" />
+    <br />
+    メールアドレス
+    <input type="email" id="input-email" />
+    <br />
+    パスワード
+    <input type="password" id="input-password" />
+    <br />
+    <input type="button" value="ログインする" id="submit" onclick="Submit()" />
+    <p id="result-name">未記入</p>
+    <p id="result-email">未記入</p>
+    <p id="result-password">未記入</p>
+
+    <script>
+      function Submit() {
+        document.getElementById("result-name").textContent =
+          document.getElementById("input-name").value;
+
+        document.getElementById("result-email").textContent =
+          document.getElementById("input-email").value;
+
+        document.getElementById("result-password").textContent =
+          document.getElementById("input-password").value;
+      }
+    </script>
+  </body>
+</html>
