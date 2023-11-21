@@ -1,6 +1,6 @@
 describe("Sample test", () => {
   it("check data", () => {
-    // cyは
+    // cyはvscodeではエラーだがcypressで正常に動作する
     cy.visit("test_cypress.html"); // 今回はファイルの相対パス
 
     cy.get("#input-email").type("dummy@email.com"); // 適当なメールアドレスを渡す

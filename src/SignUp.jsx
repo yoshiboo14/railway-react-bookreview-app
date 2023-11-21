@@ -8,6 +8,8 @@ export const SignUp = () => {
     paddingTop: "100px",
   };
 
+  //   useEffectでpost通信を非同期処理
+
   return (
     <>
       <form action="#" method="post" style={signUpStyle}>
