@@ -1,16 +1,19 @@
 import "./App.css";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Home } from "./Home";
+import { SignUp } from "./SignUp";
+import { SignIn } from "./SignIn";
 
 function App() {
   return (
-    <div className="App">
-      <h1>テスト項目</h1>
-      <p>email</p>
-      <input type="email" />
-      <br />
-      <br />
-      <p>password</p>
-      <input type="password" />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/signUp" element={<SignUp />}></Route>
+        <Route path="/signIn" element={<SignIn />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
