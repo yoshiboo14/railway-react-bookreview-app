@@ -14,11 +14,18 @@ export const SignIn = () => {
         <h1>ログイン画面</h1>
         <label htmlFor="name">
           <p>ユーザー名</p>
-          <input type="text" name="name" id="name" placeholder="名前を入力" />
+          <input
+            data-testid="user"
+            type="user"
+            name="name"
+            id="name"
+            placeholder="名前を入力"
+          />
         </label>
         <label htmlFor="email">
           <p>メールアドレス</p>
           <input
+            data-testid="email"
             type="email"
             name="email"
             id="email"
@@ -28,6 +35,7 @@ export const SignIn = () => {
         <label htmlFor="password">
           <p>パスワード</p>
           <input
+            data-testid="password"
             type="password"
             name="password"
             id="password"
