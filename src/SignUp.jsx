@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Compressor from "compressorjs";
 
 export const SignUp = () => {
   // 簡易的なスタイルの適用
@@ -12,6 +13,7 @@ export const SignUp = () => {
 
   // 新規登録データをステートとして管理
   const [name, setName] = useState("");
+  const [icon, setIcon] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // エラーメッセージをステートで管理
@@ -29,6 +31,32 @@ export const SignUp = () => {
   const onChangePassword = (e) => {
     setPassword(e.target.value);
   };
+  // アイコンの圧縮処理
+  const onChangeFileSize = (e) => {
+    const selectedIcon = e.target.files[0];
+    console.log(selectedIcon);
+
+    // 圧縮処理
+    new Compressor(selectedIcon, {
+      quality: 0.6,
+      maxWidth: 300,
+      maxHeight: 200,
+      mimeType: "image/png",
+
+      //圧縮が完了した時の処理を記述する
+      success(result) {
+        console.log(result);
+        const url = URL.createObjectURL(result);
+        setIcon(url);
+      },
+
+      //エラー処理
+      error(err) {
+        console.log(err.message);
+      },
+    });
+  };
+  // console.log(icon);
 
   //   axiosでpost通信を非同期処理
   const onCreateUser = () => {
@@ -66,6 +94,19 @@ export const SignUp = () => {
             onChange={onChangeName}
           />
         </label>
+        <label htmlFor="name">
+          <p>アイコン</p>
+          <input
+            type="file"
+            name="file"
+            id="file"
+            onChange={onChangeFileSize}
+          />
+        </label>
+        <br />
+        <div>
+          <img src={icon} alt="" />
+        </div>
         <label htmlFor="email">
           <p>メールアドレス</p>
           <input
