@@ -8,10 +8,17 @@ export const SignIn = () => {
     textAlign: "center",
     paddingTop: "100px",
   };
+  const validation = {
+    color: "red",
+  };
 
   // 新規登録データをステートとして管理
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // バリデーションエラー
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
   // エラーメッセージをステートで管理
   const [error, setError] = useState("");
   // リダイレクト
@@ -20,9 +27,23 @@ export const SignIn = () => {
   // インプットのonChange関数
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
+    // バリデーション機能
+    const regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+    if (!regex.test(email)) {
+      setEmailError("有効なメールアドレスを入力してください。");
+    } else {
+      setEmailError("");
+    }
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
+    // バリデーション機能
+    const regex = /^[a-z\d]{8,100}$/i;
+    if (!regex.test(password)) {
+      setPasswordError("有効なパスワードを入力してください。");
+    } else {
+      setPasswordError("");
+    }
   };
 
   //   axiosでpost通信を非同期処理
@@ -51,6 +72,8 @@ export const SignIn = () => {
         <h1>ログイン画面</h1>
         <label htmlFor="email">
           <p>メールアドレス</p>
+          {/* バリデーション */}
+          {emailError && <p style={validation}>{emailError}</p>}
           <input
             data-testid="email"
             type="email"
@@ -62,6 +85,8 @@ export const SignIn = () => {
         </label>
         <label htmlFor="password">
           <p>パスワード</p>
+          {/* バリデーション */}
+          {password && <p style={validation}>{passwordError}</p>}
           <input
             data-testid="password"
             type="password"
