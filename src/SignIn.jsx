@@ -55,10 +55,13 @@ export const SignIn = () => {
     axios
       .post("https://railway.bookreview.techtrain.dev/signin", data)
       .then((res) => {
+        alert("ログインできました");
+        console.log("トークンを送ります");
         console.log(res.data);
         history("/");
       })
       .catch((err) => {
+        console.log("ログインできませんでした");
         console.log(err);
         setError(err);
       });
