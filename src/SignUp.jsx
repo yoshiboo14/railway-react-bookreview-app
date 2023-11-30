@@ -10,14 +10,25 @@ export const SignUp = () => {
     textAlign: "center",
     paddingTop: "100px",
   };
+  const validation = {
+    color: "red",
+  };
 
   // 新規登録データをステートとして管理
   const [name, setName] = useState("");
   const [icon, setIcon] = useState("");
+  const [iconSrc, setIconSrc] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // バリデーションエラー
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const [accessToken, setAccessToken] = useState("");
   // エラーメッセージをステートで管理
   const [error, setError] = useState("");
+
   // リダイレクト
   const history = useNavigate();
 
@@ -27,27 +38,43 @@ export const SignUp = () => {
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
+    // バリデーション機能
+    const regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
+    if (!regex.test(email)) {
+      setEmailError("有効なメールアドレスを入力してください。");
+    } else {
+      setEmailError("");
+    }
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
+    // バリデーション機能
+    const regex = /^[a-z\d]{8,100}$/i;
+    if (!regex.test(password)) {
+      setPasswordError("有効なパスワードを入力してください。");
+    } else {
+      setPasswordError("");
+    }
   };
   // アイコンの圧縮処理
   const onChangeFileSize = (e) => {
     const selectedIcon = e.target.files[0];
-    console.log(selectedIcon);
+    // console.log(selectedIcon);
 
     // 圧縮処理
     new Compressor(selectedIcon, {
-      quality: 0.6,
+      quality: 0.3,
       maxWidth: 300,
       maxHeight: 200,
-      mimeType: "image/png",
+      // mimeType: "image/jpg",
 
       //圧縮が完了した時の処理を記述する
       success(result) {
-        console.log(result);
+        // console.log(result);
+        setIcon(result);
         const url = URL.createObjectURL(result);
-        setIcon(url);
+        // console.log(url);
+        setIconSrc(url);
       },
 
       //エラー処理
@@ -65,15 +92,40 @@ export const SignUp = () => {
       email: email,
       password: password,
     };
+
     axios
       .post("https://railway.bookreview.techtrain.dev/users", data)
       .then((res) => {
         console.log(res.data);
-        history("/");
+        console.log(res.data.token);
+        setAccessToken(res.data.token);
+        // フォームデータ
+        const img = {
+          icon: icon,
+        };
+        // console.log(img.icon);
+
+        // 画像のアップロード
+        axios
+          .post("https://railway.bookreview.techtrain.dev/uploads", img, {
+            headers: {
+              Authorization: `Bearer ${res.data.token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            console.log(accessToken);
+            history("/");
+          })
+          .catch((err) => {
+            console.log(err);
+            setError(err.response.data.message);
+          });
       })
       .catch((err) => {
         console.log(err);
-        setError(err);
+        setError(err.response.data.message);
       });
   };
 
@@ -81,7 +133,7 @@ export const SignUp = () => {
   return (
     <>
       {/* エラーの表示 */}
-      <p>{error}</p>
+      {error && <p>{error}</p>}
       <form method="post" style={signUpStyle}>
         <h1>新規作成画面</h1>
         <label htmlFor="name">
@@ -100,15 +152,18 @@ export const SignUp = () => {
             type="file"
             name="file"
             id="file"
+            encType="multipart/form-data"
             onChange={onChangeFileSize}
           />
         </label>
         <br />
         <div>
-          <img src={icon} alt="" />
+          <img src={iconSrc} alt="アイコン画像" />
         </div>
         <label htmlFor="email">
           <p>メールアドレス</p>
+          {/* バリデーション */}
+          {emailError && <p style={validation}>{emailError}</p>}
           <input
             type="email"
             name="email"
@@ -119,6 +174,8 @@ export const SignUp = () => {
         </label>
         <label htmlFor="password">
           <p>パスワード</p>
+          {/* バリデーション */}
+          {password && <p style={validation}>{passwordError}</p>}
           <input
             type="password"
             name="password"
