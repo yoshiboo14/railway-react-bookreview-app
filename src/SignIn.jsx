@@ -58,6 +58,8 @@ export const SignIn = () => {
         alert("ログインできました");
         console.log("トークンを送ります");
         console.log(res.data);
+        // トークンをlocalStorageに保存
+        localStorage.setItem("accessToken", res.data.token);
         history("/");
       })
       .catch((err) => {
