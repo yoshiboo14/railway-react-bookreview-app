@@ -9,6 +9,8 @@ export const Home = () => {
 
   // 取得した10件の配列をステートで管理
   const [reviews, setReviews] = useState("");
+  // 現在のページ番号
+  const [currentPage, setCurrentPage] = useState(1);
 
   // 書籍一覧を取得
   useEffect(() => {
@@ -27,10 +29,46 @@ export const Home = () => {
   }, []);
 
   // 次へボタン
-  const nextPage = () => {};
+  const nextPage = () => {
+    //次のオフセット(10件)を格納
+    const offset = (currentPage + 1) * 10;
+    //ページ数を更新(オフセットを動的にするため)
+    setCurrentPage(currentPage + 1);
+
+    axios
+      .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setReviews(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   // 前へボタン
-  const prevPage = () => {};
+  const prevPage = () => {
+    //次のオフセット(10件)を格納
+    const offset = (currentPage - 1) * 10;
+    //ページ数を更新(オフセットを動的にするため)
+    setCurrentPage(currentPage - 1);
+
+    axios
+      .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        setReviews(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -49,13 +87,15 @@ export const Home = () => {
       {reviews.map((review) => {
         return (
           <>
-            <h1 key={review.id}>{review.title}</h1>
-            <h2 key={review.id}>{review.review}</h2>
-            <ul>
-              <li key={review.id}>詳細　{review.detail}</li>
-              <li key={review.id}>投稿者　{review.reviewer}</li>
-              <li key={review.id}>URL {review.url}</li>
-            </ul>
+            <div>
+              <h1>{review.title}</h1>
+              <h2>{review.review}</h2>
+              <ul key={review.id}>
+                <li>詳細　{review.detail}</li>
+                <li>投稿者　{review.reviewer}</li>
+                <li>URL {review.url}</li>
+              </ul>
+            </div>
           </>
         );
       })}
