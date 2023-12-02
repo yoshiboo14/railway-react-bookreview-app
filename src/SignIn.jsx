@@ -60,19 +60,19 @@ export const SignIn = () => {
         console.log(res.data);
         // トークンをlocalStorageに保存
         localStorage.setItem("accessToken", res.data.token);
-        history("/");
+        history("/books");
       })
       .catch((err) => {
-        console.log("ログインできませんでした");
+        alert("ログインできませんでした");
         console.log(err);
-        setError(err);
+        setError(err.message);
       });
   };
 
   return (
     <>
       {/* エラーの表示 */}
-      <p>{error}</p>
+      {error && <p style={validation}>{error}</p>}
       <form action="#" method="post" style={signInStyle}>
         <h1>ログイン画面</h1>
         <label htmlFor="email">

@@ -63,10 +63,9 @@ export const SignUp = () => {
 
     // 圧縮処理
     new Compressor(selectedIcon, {
-      quality: 0.3,
+      quality: 0.6,
       maxWidth: 300,
       maxHeight: 200,
-      // mimeType: "image/jpg",
 
       //圧縮が完了した時の処理を記述する
       success(result) {
@@ -114,18 +113,20 @@ export const SignUp = () => {
             },
           })
           .then((res) => {
+            alert("新規登録できました");
             console.log(res.data);
             console.log(accessToken);
-            history("/");
+            history("/signIn");
           })
           .catch((err) => {
             console.log(err);
-            setError(err.response.data.message);
+            setError(err.message);
           });
       })
       .catch((err) => {
+        alert("新規登録できませんでした");
         console.log(err);
-        setError(err.response.data.message);
+        setError(err.message);
       });
   };
 
@@ -133,7 +134,7 @@ export const SignUp = () => {
   return (
     <>
       {/* エラーの表示 */}
-      {error && <p>{error}</p>}
+      {error && <p style={validation}>{error}</p>}
       <form method="post" style={signUpStyle}>
         <h1>新規作成画面</h1>
         <label htmlFor="name">
