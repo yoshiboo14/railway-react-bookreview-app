@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pagination } from "./Pagination";
+import "./Home.css";
 
 export const Home = () => {
   // ローカルストレージに保存したトークンを取得する
@@ -34,7 +35,6 @@ export const Home = () => {
     const offset = (currentPage + 1) * 10;
     //ページ数を更新(オフセットを動的にするため)
     setCurrentPage(currentPage + 1);
-
     axios
       .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
         headers: {
@@ -55,7 +55,6 @@ export const Home = () => {
     const offset = (currentPage - 1) * 10;
     //ページ数を更新(オフセットを動的にするため)
     setCurrentPage(currentPage - 1);
-
     axios
       .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
         headers: {
@@ -72,36 +71,44 @@ export const Home = () => {
 
   return (
     <>
-      <div className="App">
-        <h1>書籍レビューの一覧画面</h1>
+      <div className="BooksReviewApp">
+        <h1 className="BooksReviewApp_title">書籍レビューの一覧画面</h1>
         <Link to="/signUp">
-          <button>新規作成する</button>
+          <button className="BooksReviewApp_signUp_button">新規作成する</button>
         </Link>
         <br />
         <br />
         <Link to="/signIn">
-          <button>ログインする</button>
+          <button className="BooksReviewApp_signIn_button">ログインする</button>
         </Link>
+        {/* レビューを展開 */}
+        {reviews.map((review) => {
+          return (
+            <>
+              <div className="BooksReviewApp_review">
+                <h1 className="BooksReviewApp_review_title">{review.title}</h1>
+                <h2 className="BooksReviewApp_review_review">
+                  {review.review}
+                </h2>
+                <ul className="BooksReviewApp_review_id" key={review.id}>
+                  <li className="BooksReviewApp_review_detail">
+                    詳細　{review.detail}
+                  </li>
+                  <li className="BooksReviewApp_review_reviewer">
+                    投稿者　{review.reviewer}
+                  </li>
+                  <li className="BooksReviewApp_review_url">
+                    URL {review.url}
+                  </li>
+                </ul>
+              </div>
+            </>
+          );
+        })}
+        <div className="BooksReviewApp_Pagination">
+          <Pagination nextPage={nextPage} prevPage={prevPage} />
+        </div>
       </div>
-      {/* レビューを展開 */}
-      {reviews.map((review) => {
-        return (
-          <>
-            <div>
-              <h1>{review.title}</h1>
-              <h2>{review.review}</h2>
-              <ul key={review.id}>
-                <li>詳細　{review.detail}</li>
-                <li>投稿者　{review.reviewer}</li>
-                <li>URL {review.url}</li>
-              </ul>
-            </div>
-          </>
-        );
-      })}
-      <Pagination />
-      <button onClick={prevPage}>前へ</button>
-      <button onClick={nextPage}>次へ</button>
     </>
   );
 };
