@@ -5,15 +5,3 @@
 .BooksReviewApp_title {
   color: blue;
 }
-
-.BooksReviewApp_review {
-  text-align: center;
-}
-
-.BooksReviewApp_review_id {
-  list-style: none;
-}
-
-.BooksReviewApp_Pagination {
-  text-align: center;
-}
