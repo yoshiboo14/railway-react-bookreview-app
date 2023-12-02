@@ -1,15 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Pagination } from "./Pagination";
+import "./Books.css";
 
 export const Books = () => {
   // ローカルストレージに保存したトークンを取得する
   const accessToken = localStorage.getItem("accessToken");
 
   // 取得した10件の配列をステートで管理
-  const [reviews, setReviews] = useState("");
+  const [reviews, setReviews] = useState([]);
   // 現在のページ番号
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
 
   // 書籍一覧を取得
   useEffect(() => {
