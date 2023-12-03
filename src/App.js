@@ -6,6 +6,7 @@ import { SignUp } from "./SignUp";
 import { SignIn } from "./SignIn";
 // import { LogIn } from "./LogIn_jest";
 import { Books } from "./Books";
+import { Profile } from "./Profile";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/signIn" element={<SignIn />}></Route>
         {/* <Route path="/LogIn" element={<LogIn />}></Route> */}
         <Route path="/books" element={<Books />}></Route>
+        <Route path="/profile" element={<Profile />}></Route>
       </Routes>
     </BrowserRouter>
   );

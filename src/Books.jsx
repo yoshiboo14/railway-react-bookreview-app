@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Pagination } from "./Pagination";
 import "./Books.css";
+import { Link } from "react-router-dom";
 
 export const Books = () => {
   // ローカルストレージに保存したトークンを取得する
@@ -72,6 +73,7 @@ export const Books = () => {
     <>
       <div className="BooksReviewApp">
         <h1 className="BooksReviewApp_title">書籍レビューの一覧画面</h1>
+        <Link to="/profile">ユーザー情報</Link>
         {/* レビューを展開 */}
         {reviews.map((review) => {
           return (
