@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Pagination } from "./Pagination";
 import "./Books.css";
 import { Link } from "react-router-dom";
+import { useCookies } from "react-cookie";
 
 export const Books = () => {
-  // ローカルストレージに保存したトークンを取得する
-  const accessToken = localStorage.getItem("accessToken");
+  // アクセストークン
+  const [accessToken, setAccessToken] = useCookies(); // useCookiesに変更
 
   // 取得した10件の配列をステートで管理
   const [reviews, setReviews] = useState([]);
@@ -18,7 +19,7 @@ export const Books = () => {
     axios
       .get("https://railway.bookreview.techtrain.dev/books", {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken.token}`,
           "Content-Type": "application/json",
         },
       })
@@ -38,7 +39,7 @@ export const Books = () => {
     axios
       .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken.token}`,
           "Content-Type": "application/json",
         },
       })
@@ -58,7 +59,7 @@ export const Books = () => {
     axios
       .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken.token}`,
           "Content-Type": "application/json",
         },
       })
@@ -74,6 +75,9 @@ export const Books = () => {
       <div className="BooksReviewApp">
         <h1 className="BooksReviewApp_title">書籍レビューの一覧画面</h1>
         <Link to="/profile">ユーザー情報</Link>
+        <br />
+        <br />
+        <Link>ログアウト</Link>
         {/* レビューを展開 */}
         {reviews.map((review) => {
           return (

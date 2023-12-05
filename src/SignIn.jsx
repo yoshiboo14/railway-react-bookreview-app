@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 
 export const SignIn = () => {
@@ -18,7 +19,8 @@ export const SignIn = () => {
   // バリデーションエラー
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
+  // アクセストークン
+  const [accessToken, setAccessToken] = useCookies(["token"]); // useCookiesに変更
   // エラーメッセージをステートで管理
   const [error, setError] = useState("");
   // リダイレクト
@@ -56,10 +58,10 @@ export const SignIn = () => {
       .post("https://railway.bookreview.techtrain.dev/signin", data)
       .then((res) => {
         alert("ログインできました");
+        // トークンをクッキーに保存
+        setAccessToken("token", res.data.token);
         console.log("トークンを送ります");
-        console.log(res.data);
-        // トークンをlocalStorageに保存
-        localStorage.setItem("accessToken", res.data.token);
+        console.log(accessToken);
         history("/books");
       })
       .catch((err) => {

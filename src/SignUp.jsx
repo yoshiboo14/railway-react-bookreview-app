@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Compressor from "compressorjs";
+import { useCookies } from "react-cookie";
 
 export const SignUp = () => {
   // 簡易的なスタイルの適用
@@ -20,12 +21,11 @@ export const SignUp = () => {
   const [iconSrc, setIconSrc] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   // バリデーションエラー
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-
-  const [accessToken, setAccessToken] = useState("");
+  // アクセストークン
+  const [accessToken, setAccessToken] = useCookies(["token"]); // useCookiesに変更
   // エラーメッセージをステートで管理
   const [error, setError] = useState("");
 
@@ -75,7 +75,6 @@ export const SignUp = () => {
         // console.log(url);
         setIconSrc(url);
       },
-
       //エラー処理
       error(err) {
         console.log(err.message);
@@ -97,7 +96,8 @@ export const SignUp = () => {
       .then((res) => {
         console.log(res.data);
         console.log(res.data.token);
-        setAccessToken(res.data.token);
+        // クッキーに保存
+        setAccessToken("token", res.data.token);
         // フォームデータ
         const img = {
           icon: icon,
@@ -116,6 +116,7 @@ export const SignUp = () => {
             alert("新規登録できました");
             console.log(res.data);
             console.log(accessToken);
+
             history("/signIn");
           })
           .catch((err) => {
