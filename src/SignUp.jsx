@@ -116,8 +116,7 @@ export const SignUp = () => {
             alert("新規登録できました");
             console.log(res.data);
             console.log(accessToken);
-
-            history("/signIn");
+            history("/books");
           })
           .catch((err) => {
             console.log(err);
