@@ -6,28 +6,62 @@ import { Link } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 export const Books = () => {
-  // アクセストークン
-  const [accessToken, setAccessToken] = useCookies(); // useCookiesに変更
-
+  // アクセストークン(useCookiesに変更,セキュリティ考慮)
+  const [accessToken, setAccessToken] = useCookies();
+  // ユーザー情報
+  const [user, setUser] = useState(null);
   // 取得した10件の配列をステートで管理
   const [reviews, setReviews] = useState([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
 
+  // ユーザー情報取得
+  useEffect(() => {
+    if (accessToken.token) {
+      axios
+        .get("https://railway.bookreview.techtrain.dev/users", {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setUser(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [accessToken.token]);
+
   // 書籍一覧を取得
   useEffect(() => {
-    axios
-      .get("https://railway.bookreview.techtrain.dev/books", {
-        headers: {
-          Authorization: `Bearer ${accessToken.token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        setReviews(res.data);
-      })
-      .catch((err) => console.log(err));
+    // ログイン状態(権限)によって取得するapiを変更
+    if (accessToken.token) {
+      axios
+        .get("https://railway.bookreview.techtrain.dev/books", {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          setReviews(res.data);
+        })
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get("https://railway.bookreview.techtrain.dev/public/books", {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          setReviews(res.data);
+        })
+        .catch((err) => console.log(err));
+    }
   }, []);
 
   // 次へボタン
@@ -73,7 +107,16 @@ export const Books = () => {
   return (
     <>
       <div className="BooksReviewApp">
-        <h1 className="BooksReviewApp_title">書籍レビューの一覧画面</h1>
+        <h1 className="BooksReviewApp_title">
+          書籍レビューの一覧画面　{" "}
+          {user ? (
+            <span>: {user.name}</span>
+          ) : (
+            <Link to="/signIn">
+              <button>ログインする</button>
+            </Link>
+          )}
+        </h1>
         <Link to="/profile">ユーザー情報</Link>
         <br />
         <br />
