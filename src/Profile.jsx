@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 export const Profile = () => {
   // 新規登録データをステートとして管理
@@ -9,16 +11,18 @@ export const Profile = () => {
   // バリデーションエラー
   // エラーメッセージをステートで管理
   const [error, setError] = useState("");
+  // リダイレクト
+  const history = useNavigate();
 
-  // ローカルストレージに保存したトークンを取得する
-  const accessToken = localStorage.getItem("accessToken");
+  // アクセストークン(useCookiesに変更,セキュリティ考慮)
+  const [accessToken, setAccessToken] = useCookies();
 
   //   登録済みのユーザー情報を取得
   useEffect(() => {
     axios
       .get("https://railway.bookreview.techtrain.dev/users", {
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken.token}`,
         },
       })
       .then((res) => {
@@ -45,7 +49,9 @@ export const Profile = () => {
             id="name"
             placeholder="ユーザー名"
             value={name}
-            onChange={(e) => e.target.value}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
           />
         </label>
         <label htmlFor="name">
@@ -73,6 +79,9 @@ export const Profile = () => {
           プロフィールを更新する
         </button>
       </form>
+      <button type="button" onClick={() => history("/books")}>
+        一覧画面に戻る
+      </button>
     </>
   );
 };
