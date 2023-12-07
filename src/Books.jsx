@@ -34,7 +34,7 @@ export const Books = () => {
     }
   }, [accessToken.token]);
 
-  // 書籍一覧を取得
+  // 書籍一覧を取得(ページネーションも共通化)
   useEffect(() => {
     // ログイン状態(権限)によって取得するapiを変更
     if (accessToken.token) {
@@ -46,7 +46,7 @@ export const Books = () => {
           },
         })
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           setReviews(res.data);
         })
         .catch((err) => console.log(err));
@@ -64,14 +64,10 @@ export const Books = () => {
         })
         .catch((err) => console.log(err));
     }
-  }, []);
 
-  // 次へボタン
-  const nextPage = () => {
-    //次のオフセット(10件)を格納
+    // マイナスの処理もしたほうがいいかも
     const offset = (currentPage + 1) * 10;
-    //ページ数を更新(オフセットを動的にするため)
-    setCurrentPage(currentPage + 1);
+
     axios
       .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
         headers: {
@@ -84,26 +80,18 @@ export const Books = () => {
         setReviews(res.data);
       })
       .catch((err) => console.log(err));
+  }, [currentPage]);
+
+  // 次へボタン
+  const nextPage = () => {
+    //ページ数を更新(オフセットを動的にするため)
+    setCurrentPage(currentPage + 1);
   };
 
   // 前へボタン
   const prevPage = () => {
-    //次のオフセット(10件)を格納
-    const offset = (currentPage - 1) * 10;
     //ページ数を更新(オフセットを動的にするため)
     setCurrentPage(currentPage - 1);
-    axios
-      .get(`https://railway.bookreview.techtrain.dev/books?offset=${offset}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken.token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-        setReviews(res.data);
-      })
-      .catch((err) => console.log(err));
   };
 
   // ログアウト処理
