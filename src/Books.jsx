@@ -2,18 +2,20 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Pagination } from "./Pagination";
 import "./Books.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { SignOut } from "./SignOut";
 
 export const Books = () => {
   // アクセストークン(useCookiesに変更,セキュリティ考慮)
-  const [accessToken, setAccessToken] = useCookies();
+  const [accessToken, setAccessToken, removeCookie] = useCookies();
   // ユーザー情報
   const [user, setUser] = useState(null);
   // 取得した10件の配列をステートで管理
   const [reviews, setReviews] = useState([]);
   // 現在のページ番号
   const [currentPage, setCurrentPage] = useState(0);
+  const history = useNavigate();
 
   // ユーザー情報取得
   useEffect(() => {
@@ -104,6 +106,13 @@ export const Books = () => {
       .catch((err) => console.log(err));
   };
 
+  // ログアウト処理
+  const signOut = () => {
+    removeCookie("token", { path: "/" }, { httpOnly: true });
+    history("/login");
+    console.log("ログアウトします");
+  };
+
   return (
     <>
       <div className="BooksReviewApp">
@@ -120,7 +129,7 @@ export const Books = () => {
         <Link to="/profile">ユーザー情報</Link>
         <br />
         <br />
-        <Link>ログアウト</Link>
+        <SignOut signOut={signOut} />
         {/* レビューを展開 */}
         {reviews.map((review) => {
           return (
