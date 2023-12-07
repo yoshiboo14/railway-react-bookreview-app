@@ -69,10 +69,10 @@ export const SignUp = () => {
 
       //圧縮が完了した時の処理を記述する
       success(result) {
-        // console.log(result);
+        console.log(result);
         setIcon(result);
         const url = URL.createObjectURL(result);
-        // console.log(url);
+        console.log(url);
         setIconSrc(url);
       },
       //エラー処理
@@ -98,24 +98,25 @@ export const SignUp = () => {
         console.log(res.data.token);
         // クッキーに保存
         setAccessToken("token", res.data.token);
+
         // フォームデータ
-        const img = {
-          icon: icon,
-        };
-        // console.log(img.icon);
+        const img = new FormData();
+        console.log(img);
+        img.append("icon", icon);
+        console.log(img);
+        console.log(img.get("icon"));
 
         // 画像のアップロード
         axios
           .post("https://railway.bookreview.techtrain.dev/uploads", img, {
             headers: {
               Authorization: `Bearer ${res.data.token}`,
-              "Content-Type": "multipart/form-data",
             },
           })
           .then((res) => {
             alert("新規登録できました");
             console.log(res.data);
-            console.log(accessToken);
+            // console.log(accessToken);
             history("/books");
           })
           .catch((err) => {
