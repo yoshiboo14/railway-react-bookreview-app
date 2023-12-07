@@ -54,7 +54,7 @@ export const Profile = () => {
             }}
           />
         </label>
-        <label htmlFor="name">
+        <label htmlFor="file">
           <p>アイコン</p>
           <input
             type="file"
@@ -67,10 +67,7 @@ export const Profile = () => {
         </label>
         <br />
         <div>
-          <img
-            //   src={iconSrc}
-            alt="アイコン画像"
-          />
+          <img src={icon} alt="アイコン画像" />
         </div>
         <button
           type="button"
