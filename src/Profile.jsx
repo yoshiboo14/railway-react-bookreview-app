@@ -7,15 +7,17 @@ export const Profile = () => {
   // 新規登録データをステートとして管理
   const [name, setName] = useState("");
   const [icon, setIcon] = useState("");
-  const [iconSrc, setIconSrc] = useState("");
-  // バリデーションエラー
-  // エラーメッセージをステートで管理
-  const [error, setError] = useState("");
   // リダイレクト
   const history = useNavigate();
-
   // アクセストークン(useCookiesに変更,セキュリティ考慮)
   const [accessToken, setAccessToken] = useCookies();
+
+  // スタイル
+  const Profile = {
+    alignItems: "center",
+    textAlign: "center",
+    paddingTop: "100px",
+  };
 
   //   登録済みのユーザー情報を取得
   useEffect(() => {
@@ -26,12 +28,11 @@ export const Profile = () => {
         },
       })
       .then((res) => {
-        // const res2 = res.json();
         console.log(res);
         setName(res.data.name);
         setIcon(res.data.iconUrl);
       })
-      .catch();
+      .catch((err) => console.log(err));
   }, []);
 
   // 更新ボタンの処理
@@ -57,10 +58,7 @@ export const Profile = () => {
 
   return (
     <>
-      <form
-        method="post"
-        //   style={signUpStyle}
-      >
+      <form method="post" style={Profile}>
         <h1>プロフィール画面</h1>
         <label htmlFor="name">
           <p>ユーザー名</p>
@@ -81,13 +79,11 @@ export const Profile = () => {
         <div>
           <img src={icon} alt="アイコン画像" />
         </div>
+        <br />
         <button type="button" onClick={onEditUser}>
           プロフィールを更新する
         </button>
       </form>
-      <button type="button" onClick={() => history("/books")}>
-        一覧画面に戻る
-      </button>
     </>
   );
 };
