@@ -77,16 +77,7 @@ export const Profile = () => {
         </label>
         <label htmlFor="file">
           <p>アイコン</p>
-          <input
-            type="file"
-            name="file"
-            id="file"
-            encType="multipart/form-data"
-            src={icon}
-            // onChange={onChangeFileSize}
-          />
         </label>
-        <br />
         <div>
           <img src={icon} alt="アイコン画像" />
         </div>
