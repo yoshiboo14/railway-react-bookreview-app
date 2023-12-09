@@ -96,9 +96,14 @@ export const Books = () => {
 
   // ログアウト処理
   const signOut = () => {
-    removeCookie("token", { path: "/" }, { httpOnly: true });
-    history("/login");
-    console.log("ログアウトします");
+    const confirm = window.confirm("ログアウトしますか");
+    if (confirm) {
+      removeCookie("token", { path: "/" }, { httpOnly: true });
+      history("/login");
+      console.log("ログアウトします");
+    } else {
+      alert("ログアウトを中止します");
+    }
   };
 
   return (
@@ -107,17 +112,16 @@ export const Books = () => {
         <h1 className="BooksReviewApp_title">
           書籍レビューの一覧画面　{" "}
           {user ? (
-            <span>: {user.name}</span>
+            <Link to="/profile">{user.name}</Link>
           ) : (
-            <Link to="/signIn">
+            <Link to="/login">
               <button>ログインする</button>
             </Link>
           )}
         </h1>
-        <Link to="/profile">ユーザー情報</Link>
         <br />
         <br />
-        <SignOut signOut={signOut} />
+        {user && <SignOut signOut={signOut} />}
         {/* レビューを展開 */}
         {reviews.map((review) => {
           return (
