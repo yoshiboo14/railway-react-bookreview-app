@@ -24,11 +24,10 @@ function App() {
           <Route path="/signUp" element={<SignUp />}></Route>
         )}
         {accessToken.token ? (
-          <Route path="/signIn" element={<Navigate to="/books" />}></Route>
+          <Route path="/login" element={<Navigate to="/books" />}></Route>
         ) : (
-          <Route path="/signIn" element={<SignIn />}></Route>
+          <Route path="/login" element={<SignIn />}></Route>
         )}
-        {/* <Route path="/LogIn" element={<LogIn />}></Route> */}
         <Route path="/books" element={<Books />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
       </Routes>
