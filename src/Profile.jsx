@@ -34,6 +34,27 @@ export const Profile = () => {
       .catch();
   }, []);
 
+  // 更新ボタンの処理
+  const onEditUser = () => {
+    const data = {
+      name: name,
+    };
+
+    axios
+      .put("https://railway.bookreview.techtrain.dev/users", data, {
+        headers: {
+          Authorization: `Bearer ${accessToken.token}`,
+        },
+      })
+      .then((res) => {
+        setName(res.data.name);
+        alert("プロフィールを更新しました");
+        console.log(res);
+        history("/books");
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <form
@@ -69,10 +90,7 @@ export const Profile = () => {
         <div>
           <img src={icon} alt="アイコン画像" />
         </div>
-        <button
-          type="button"
-          //  onClick={onCreateUser}
-        >
+        <button type="button" onClick={onEditUser}>
           プロフィールを更新する
         </button>
       </form>
