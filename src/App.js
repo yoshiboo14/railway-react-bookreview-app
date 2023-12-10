@@ -8,6 +8,7 @@ import { SignIn } from "./SignIn";
 import { Books } from "./Books";
 import { Profile } from "./Profile";
 import { useCookies } from "react-cookie";
+import { NewReview } from "./NewReview";
 
 function App() {
   // アクセストークン(useCookiesに変更,セキュリティ考慮)
@@ -30,6 +31,7 @@ function App() {
         )}
         <Route path="/books" element={<Books />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
+        <Route path="/new" element={<NewReview />}></Route>
       </Routes>
     </BrowserRouter>
   );
