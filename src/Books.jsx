@@ -34,7 +34,7 @@ export const Books = () => {
     }
   }, [accessToken.token]);
 
-  // 書籍一覧を取得(ページネーションも共通化)
+  // 書籍一覧を取得
   useEffect(() => {
     // ログイン状態(権限)によって取得するapiを変更
     if (accessToken.token) {
@@ -54,7 +54,6 @@ export const Books = () => {
       axios
         .get("https://railway.bookreview.techtrain.dev/public/books", {
           headers: {
-            Authorization: `Bearer ${accessToken.token}`,
             "Content-Type": "application/json",
           },
         })
@@ -65,7 +64,7 @@ export const Books = () => {
         .catch((err) => console.log(err));
     }
 
-    // マイナスの処理もしたほうがいいかも
+    // ページネーションの処理
     const offset = (currentPage + 1) * 10;
 
     axios
@@ -119,6 +118,9 @@ export const Books = () => {
             </Link>
           )}
         </h1>
+        <Link to="/new">
+          <button>レビューを作成</button>
+        </Link>
         <br />
         <br />
         {user && <SignOut signOut={signOut} />}
