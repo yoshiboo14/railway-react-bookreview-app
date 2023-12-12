@@ -144,6 +144,9 @@ export const Books = () => {
                     URL {review.url}
                   </li>
                 </ul>
+                <Link to="/detailbook">
+                  <button>詳細</button>
+                </Link>
               </div>
             </>
           );
