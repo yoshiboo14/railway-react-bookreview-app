@@ -31,9 +31,9 @@ function App() {
           <Route path="/login" element={<SignIn />}></Route>
         )}
         <Route path="/books" element={<Books />}></Route>
-        <Route path="/detailbook" element={<DetailReview />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/new" element={<NewReview />}></Route>
+        <Route path="/detail/:id" element={<DetailReview />}></Route>
       </Routes>
     </BrowserRouter>
   );
