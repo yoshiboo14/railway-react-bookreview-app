@@ -11,9 +11,8 @@ export const DetailReview = () => {
   const [url, setUrl] = useState("");
   const [detail, setDetail] = useState("");
   const [review, setReview] = useState("");
-
-  //   console.log(id);
-
+  //   ローディング
+  const [loading, setLoading] = useState(true);
   const [accessToken, setAccessToken] = useCookies();
 
   // スタイル
@@ -22,8 +21,6 @@ export const DetailReview = () => {
     textAlign: "center",
     paddingTop: "100px",
   };
-
-  //   const id = "e3e1eabf-5671-4333-8075-35f6fc5e8141";
 
   useEffect(() => {
     axios
@@ -38,71 +35,79 @@ export const DetailReview = () => {
         setDetail(res.data.detail);
         setReview(res.data.review);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      //ローディング終了
+      .finally(() => {
+        setLoading(false);
+      });
   });
 
   return (
     <>
-      <form method="post" style={Review}>
-        <h1>レビュー詳細画面</h1>
-        <label htmlFor="review">
-          <p>レビュー</p>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <form method="post" style={Review}>
+          <h1>レビュー詳細画面</h1>
+          <label htmlFor="review">
+            <p>レビュー</p>
+            <input
+              type="text"
+              name="title"
+              id="title"
+              placeholder="タイトル"
+              value={title}
+              onChange={(e) => {
+                //   setTitle(e.target.value);
+              }}
+            />
+          </label>
+          <br />
+          <br />
           <input
             type="text"
-            name="title"
-            id="title"
-            placeholder="タイトル"
-            value={title}
+            name="url"
+            id="url"
+            placeholder="URL"
+            value={url}
             onChange={(e) => {
-              //   setTitle(e.target.value);
+              // setUrl(e.target.value);
             }}
           />
-        </label>
-        <br />
-        <br />
-        <input
-          type="text"
-          name="url"
-          id="url"
-          placeholder="URL"
-          value={url}
-          onChange={(e) => {
-            // setUrl(e.target.value);
-          }}
-        />
-        <br />
-        <br />
-        <textarea
-          type="text"
-          name="detail"
-          id="detail"
-          placeholder="詳細内容"
-          value={detail}
-          onChange={(e) => {
-            // setDetail(e.target.value);
-          }}
-        />
-        <br />
-        <br />
-        <textarea
-          type="text"
-          name="review"
-          id="review"
-          placeholder="新しいレビュー"
-          value={review}
-          onChange={(e) => {
-            // setReview(e.target.value);
-          }}
-        />
-        <br />
-        <br />
-        <button
-          type="button"
-          // onClick={onAddReview}
-        >
-          レビューを編集する
-        </button>
-      </form>
+          <br />
+          <br />
+          <textarea
+            type="text"
+            name="detail"
+            id="detail"
+            placeholder="詳細内容"
+            value={detail}
+            onChange={(e) => {
+              // setDetail(e.target.value);
+            }}
+          />
+          <br />
+          <br />
+          <textarea
+            type="text"
+            name="review"
+            id="review"
+            placeholder="新しいレビュー"
+            value={review}
+            onChange={(e) => {
+              // setReview(e.target.value);
+            }}
+          />
+          <br />
+          <br />
+          <button
+            type="button"
+            // onClick={onAddReview}
+          >
+            レビューを編集する
+          </button>
+        </form>
+      )}
     </>
   );
 };
