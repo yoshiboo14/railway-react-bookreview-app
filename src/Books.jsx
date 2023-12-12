@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Pagination } from "./Pagination";
 import "./Books.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { SignOut } from "./SignOut";
 
@@ -105,6 +105,26 @@ export const Books = () => {
     }
   };
 
+  // ログを送信
+  const sendLog = (id) => {
+    const data = {
+      selectBookId: id,
+    };
+
+    axios
+      .post("https://railway.bookreview.techtrain.dev/logs", data, {
+        headers: {
+          Authorization: `Bearer ${accessToken.token}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div className="BooksReviewApp">
@@ -119,7 +139,7 @@ export const Books = () => {
           )}
         </h1>
         <Link to="/new">
-          <button>レビューを作成</button>
+          <button>レビューを新規作成</button>
         </Link>
         <br />
         <br />
@@ -144,8 +164,8 @@ export const Books = () => {
                     URL {review.url}
                   </li>
                 </ul>
-                <Link to="/detailbook">
-                  <button>詳細</button>
+                <Link to={"/detail/" + review.id}>
+                  <button onClick={() => sendLog(review.id)}>詳細</button>
                 </Link>
               </div>
             </>
