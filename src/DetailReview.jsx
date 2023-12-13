@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 export const DetailReview = () => {
   // レビューのid
@@ -100,12 +100,9 @@ export const DetailReview = () => {
           />
           <br />
           <br />
-          <button
-            type="button"
-            // onClick={onAddReview}
-          >
-            レビューを編集する
-          </button>
+          <Link to={"/edit/" + id}>
+            <button type="button">レビューを編集する</button>
+          </Link>
         </form>
       )}
     </>
