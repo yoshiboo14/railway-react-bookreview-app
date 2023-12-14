@@ -1,27 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ReviewForm } from "./ReviewForm";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
 export const EditReview = () => {
-  const [accessToken, setAccessToken] = useCookies();
+  // レビューのid
+  const { id } = useParams();
   // レビュー情報
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
   const [detail, setDetail] = useState("");
   const [review, setReview] = useState("");
-  //   ローディング
-  const [loading, setLoading] = useState(true);
+  const [accessToken, setAccessToken] = useCookies();
 
-  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(`https://railway.bookreview.techtrain.dev/books/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken.token}`,
+        },
+      })
+      .then((res) => {
+        setTitle(res.data.title);
+        setUrl(res.data.url);
+        setDetail(res.data.detail);
+        setReview(res.data.review);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   const editReview = () => {
     const data = {
-      title: "string",
-      url: "string",
-      detail: "string",
-      review: "string",
+      title: title,
+      url: url,
+      detail: detail,
+      review: review,
     };
 
     axios
@@ -39,7 +53,18 @@ export const EditReview = () => {
   return (
     <>
       {id}
-      <ReviewForm title="編集" editReview={editReview} />
+      <ReviewForm
+        title={title}
+        url={url}
+        detail={detail}
+        review={review}
+        Title="編集"
+        setTitle={setTitle}
+        setUrl={setUrl}
+        setDetail={setDetail}
+        setReview={setReview}
+        editReview={editReview}
+      />
     </>
   );
 };
