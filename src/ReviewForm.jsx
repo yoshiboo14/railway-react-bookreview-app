@@ -1,20 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { useParams } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 
 export const ReviewForm = (props) => {
-  // レビューのid
-  const { id } = useParams();
-  // レビュー情報
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
-  const [detail, setDetail] = useState("");
-  const [review, setReview] = useState("");
-  //   ローディング
-  const [loading, setLoading] = useState(true);
-  const [accessToken, setAccessToken] = useCookies();
-
   // スタイル
   const Review = {
     alignItems: "center",
@@ -22,30 +9,10 @@ export const ReviewForm = (props) => {
     paddingTop: "100px",
   };
 
-  useEffect(() => {
-    axios
-      .get(`https://railway.bookreview.techtrain.dev/books/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken.token}`,
-        },
-      })
-      .then((res) => {
-        setTitle(res.data.title);
-        setUrl(res.data.url);
-        setDetail(res.data.detail);
-        setReview(res.data.review);
-      })
-      .catch((err) => console.log(err))
-      //ローディング終了
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
-
   return (
     <>
       <form method="post" style={Review}>
-        <h1>レビュー{props.title}画面</h1>
+        <h1>レビュー{props.Title}画面</h1>
         <label htmlFor="review">
           <p>レビュー</p>
           <input
@@ -53,9 +20,9 @@ export const ReviewForm = (props) => {
             name="title"
             id="title"
             placeholder="タイトル"
-            value={title}
+            value={props.title}
             onChange={(e) => {
-              setTitle(e.target.value);
+              props.setTitle(e.target.value);
             }}
           />
         </label>
@@ -66,9 +33,9 @@ export const ReviewForm = (props) => {
           name="url"
           id="url"
           placeholder="URL"
-          value={url}
+          value={props.url}
           onChange={(e) => {
-            setUrl(e.target.value);
+            props.setUrl(e.target.value);
           }}
         />
         <br />
@@ -78,9 +45,9 @@ export const ReviewForm = (props) => {
           name="detail"
           id="detail"
           placeholder="詳細内容"
-          value={detail}
+          value={props.detail}
           onChange={(e) => {
-            setDetail(e.target.value);
+            props.setDetail(e.target.value);
           }}
         />
         <br />
@@ -90,16 +57,18 @@ export const ReviewForm = (props) => {
           name="review"
           id="review"
           placeholder="新しいレビュー"
-          value={review}
+          value={props.review}
           onChange={(e) => {
-            setReview(e.target.value);
+            props.setReview(e.target.value);
           }}
         />
         <br />
         <br />
-        <button type="button" onClick={props.editReview}>
-          レビューを更新する
-        </button>
+        <Link to="/books">
+          <button type="button" onClick={props.editReview}>
+            レビューを更新する
+          </button>
+        </Link>
       </form>
     </>
   );

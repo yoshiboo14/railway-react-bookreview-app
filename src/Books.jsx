@@ -167,6 +167,9 @@ export const Books = () => {
                 <Link to={"/detail/" + review.id}>
                   <button onClick={() => sendLog(review.id)}>詳細</button>
                 </Link>
+                <Link to={"/edit/" + review.id}>
+                  <button type="button">編集する</button>
+                </Link>
               </div>
             </>
           );
