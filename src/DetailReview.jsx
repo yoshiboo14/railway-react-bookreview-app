@@ -100,9 +100,6 @@ export const DetailReview = () => {
           />
           <br />
           <br />
-          <Link to={"/edit/" + id}>
-            <button type="button">レビューを編集する</button>
-          </Link>
         </form>
       )}
     </>
