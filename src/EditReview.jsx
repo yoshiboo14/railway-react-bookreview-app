@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ReviewForm } from "./ReviewForm";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -13,6 +13,8 @@ export const EditReview = () => {
   const [detail, setDetail] = useState("");
   const [review, setReview] = useState("");
   const [accessToken, setAccessToken] = useCookies();
+  // リダイレクト
+  const history = useNavigate();
 
   useEffect(() => {
     axios
@@ -50,6 +52,25 @@ export const EditReview = () => {
       .catch((err) => console.log(err));
   };
 
+  const deleteReview = () => {
+    const deleteConfirm = window.confirm("レビューを削除しますか？");
+
+    if (deleteConfirm) {
+      axios
+        .delete(`https://railway.bookreview.techtrain.dev/books/${id}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken.token}`,
+          },
+        })
+        .then((res) => {
+          console.log("レビューを削除しました");
+          console.log(res);
+          history("/books");
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
   return (
     <>
       {id}
@@ -64,6 +85,7 @@ export const EditReview = () => {
         setDetail={setDetail}
         setReview={setReview}
         editReview={editReview}
+        deleteReview={deleteReview}
       />
     </>
   );
