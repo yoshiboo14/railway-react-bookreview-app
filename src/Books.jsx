@@ -167,9 +167,12 @@ export const Books = () => {
                 <Link to={"/detail/" + review.id}>
                   <button onClick={() => sendLog(review.id)}>詳細</button>
                 </Link>
-                <Link to={"/edit/" + review.id}>
-                  <button type="button">編集する</button>
-                </Link>
+                {/* ユーザ名とレビュアー名が等しいとき表示 */}
+                {user.name === review.reviewer && (
+                  <Link to={"/edit/" + review.id}>
+                    <button type="button">編集する</button>
+                  </Link>
+                )}
               </div>
             </>
           );
