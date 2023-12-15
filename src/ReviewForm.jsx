@@ -69,6 +69,9 @@ export const ReviewForm = (props) => {
             レビューを更新する
           </button>
         </Link>
+        <button type="button" onClick={props.deleteReview}>
+          削除
+        </button>
       </form>
     </>
   );
